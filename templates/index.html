@@ -1,17 +1,71 @@
+{%extends "base.html"%}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block main%}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Template Web App</title>
-    <link rel="stylesheet" href="./static/css/styles.css">
-</head>
 
-<body>
-    <h1>Template Web App</h1>
-    <p>the heading will be green if css is linked correctly</p>
-</body>
-    
+<div class="tabs">
+    <div class="tab-2">
+        <label for="tab2-1">Top Sentences</label>
+        <input id="tab2-1" name="tabs-two" type="radio" checked="checked">
+        <div class="card-content">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval=false>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon filter" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="carousel-content">
+                            <div>
+                                <p id="user-sentence">This is where the user's top sentence would go if there were one
+                                </p>
+                                <p id="author">by Author</p>
+                            </div>
+                            <div id="card-buttons">
+                                <button class="card-button">10 <i class="fa-solid fa-thumbs-up"></i></button>
+                                <button class="card-button"><i class="fa-solid fa-share"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon filter" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-2">
+        <label for="tab2-2">Random Sentences</label>
+        <input id="tab2-2" name="tabs-two" type="radio">
+        <div class="card-content">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval=false>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon filter" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="carousel-content">
+                            <div>
+                                <p id="user-sentence">This is where random sentences would go if there were one</p>
+                                <p id="author">by Author</p>
+                            </div>
+                            <div id="card-buttons">
+                                <button class="card-button">10 <i class="fa-solid fa-thumbs-up"></i></button>
+                                <button class="card-button"><i class="fa-solid fa-share"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon filter" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}

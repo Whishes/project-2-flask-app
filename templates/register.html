@@ -1,0 +1,21 @@
+{%extends "base.html"%}
+
+{% block main%}
+<div id="card-top">
+    <h1>Register</h1>
+</div>
+<div id="card-middle">
+    <form id="user-form">
+        <label for="email-input">Email</label>
+        <input id="email-input" class="input-field" name="email" type="email">
+        <label for="username-input">Username</label>
+        <input id="username-input" class="input-field" name="username" type="text" minlength="5">
+        <label for="password-input">Password</label>
+        <input id="password-input" class="input-field" name="password" type="password" minlength="5">
+        <div id="btn-section">
+            <button>Register</button>
+        </div>
+    </form>
+</div>
+<div id="card-bottom"></div>
+{%endblock%}
