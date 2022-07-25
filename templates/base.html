@@ -23,9 +23,13 @@
         <div id="middle-nav"></div>
         <div id="right-nav">
             <ul>
+                {%if user%}
                 <li><a class="nav-links" href="/create">Create</a></li>
+                <li><a class="nav-links" href="/signout_action">Sign Out</a></li>
+                {%else%}
                 <li><a class="nav-links" href="/login">Login</a></li>
                 <li><a class="nav-links" href="/register">Register</a></li>
+                {%endif%}
             </ul>
         </div>
     </nav>
