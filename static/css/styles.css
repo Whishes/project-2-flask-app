@@ -31,7 +31,9 @@ body {
     background: linear-gradient(135deg, rgba(244,71,77,1) 0%,rgba(232,81,83,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4474d', endColorstr='#e85153',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
-    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
 }
 
 a {
