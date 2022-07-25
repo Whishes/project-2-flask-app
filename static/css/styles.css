@@ -31,6 +31,7 @@ body {
     background: linear-gradient(135deg, rgba(244,71,77,1) 0%,rgba(232,81,83,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4474d', endColorstr='#e85153',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
+    overflow: auto;
 }
 
 a {
@@ -270,7 +271,7 @@ select:focus {
     .tabs [class*=" tab"] [type="radio"] + div {
       display: block;
       opacity: 0;
-      padding: 2rem 0;
+      /* padding: 2rem 0; */
       width: 90%;
       -webkit-transition: all 0.3s ease-in-out;
       -moz-transition: all 0.3s ease-in-out;
@@ -290,8 +291,13 @@ select:focus {
       margin-left: -100%;
     }
 
+    .tab-2 {
+        height: 600px;
+    }
+
 .card-content {
-    margin-top: 2em;
+    /*margin-top: 2em;*/
+    height:80%;
 }
     .carousel-control-next {
         height:100%;
@@ -311,7 +317,7 @@ select:focus {
 #carouselExampleControls {
     display: grid;
     grid-template-columns: 5% 90% 5%;
-    height: 300px;
+    height: 100%;
 }
 
 .carousel-item {
@@ -379,4 +385,14 @@ footer {
   #card-top > h1 {
     font-size: 5em;
 }
+
+    .card-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tab-2 {
+        height: 700px;
+    }
 }
