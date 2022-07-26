@@ -301,14 +301,14 @@ select:focus {
     /*margin-top: 2em;*/
     height:80%;
 }
-    .carousel-control-next {
-        height:100%;
-  right: 0;
+.carousel-control-next {
+    height:100%;
+    right: 0;
 }
 
 .carousel-control-prev {
     height:100%;
-  left: 0;
+    left: 0;
 }
 
 .carousel-control-next, .carousel-control-prev {
@@ -316,7 +316,13 @@ select:focus {
     width: auto;
 }
 
-#carouselExampleControls {
+/* have to separate the control to make the carousel controls work */
+#carouselTopControls {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+    height: 100%;
+}
+#carouselRandomControls {
     display: grid;
     grid-template-columns: 5% 90% 5%;
     height: 100%;
@@ -353,9 +359,9 @@ select:focus {
     justify-content: space-evenly;
 }
 
-    .filter {
-        filter: invert(34%) sepia(78%) saturate(4126%) hue-rotate(330deg) brightness(95%) contrast(103%);
-    }
+.filter {
+    filter: invert(34%) sepia(78%) saturate(4126%) hue-rotate(330deg) brightness(95%) contrast(103%);
+}
 /* 
     FOOTER STYLING
 */

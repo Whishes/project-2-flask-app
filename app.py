@@ -18,7 +18,27 @@ def index():
     if "user" in session:
         user = session.get("user")
         #print(user)
-    return render_template("index.html", user=user)
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute("""
+    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username
+    FROM sentences 
+    INNER JOIN users ON sentences.user_id = users.id
+    ORDER BY sentences.likes DESC 
+    LIMIT 5;
+    """)
+    top_sentences = cursor.fetchall()
+    cursor.execute("""
+    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username
+    FROM sentences 
+    INNER JOIN users ON sentences.user_id = users.id
+    ORDER BY RANDOM()
+    LIMIT 5;
+    """)
+    random_sentences = cursor.fetchall()
+    connection.close()
+    
+    return render_template("index.html", user=user, top_sentences = top_sentences, random_sentences = random_sentences)
 
 @app.route("/login")
 def login():
@@ -42,11 +62,13 @@ def doLogin():
         cursor.execute("SELECT id, username, email, hashed_password FROM users WHERE username = %s", [username])
 
         if cursor.rowcount == 0:
+            connection.close()
             # if no results do this
             return redirect("/login")
         else:
             #if there is a result do this
             results = cursor.fetchall()
+            connection.close()
             #print(results)
             # checks password hash to make sure it matches
             if (check(password, results[0][3])):
@@ -67,12 +89,32 @@ def signout_action():
 
 @app.route("/create")
 def create():
-    user = None
     if "user" not in session:
         return redirect("/")
 
     user = session.get("user")
+    #print(user)
     return render_template("create.html", user=user)
+
+@app.route("/create_action", methods=["POST"])
+def create_sentence():
+    if "user" not in session:
+        return redirect("/")
+
+    # get form data
+    user_id = request.form.get("user_id")
+    sentence_str = request.form.get("sentence")
+
+    #print("user id: " + user_id)
+
+    # save form data to database
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO sentences (user_id, sentence) VALUES (%s, %s)", (user_id, sentence_str))
+    connection.commit()
+    connection.close()
+
+    return redirect("/")
 
 @app.route("/register")
 def regiser():
@@ -102,6 +144,6 @@ def register_action():
     return redirect("/login")
     
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
     
 
