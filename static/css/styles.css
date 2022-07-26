@@ -47,7 +47,7 @@ a:hover{
 */
 nav {
     display: grid;
-    grid-template-columns: 2fr 0fr 1fr;
+    grid-template-columns: 2fr 0fr 2fr;
 }
 
 nav, footer {
@@ -396,5 +396,12 @@ footer {
 
     .tab-2 {
         height: 700px;
+    }
+}
+
+/* For when the virtual keyboard loads, nav shouldn't get squished */
+@media screen and (max-height: 550px) {
+    body {
+        grid-template-rows: 18% 82% 0%;
     }
 }

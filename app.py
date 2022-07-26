@@ -1,4 +1,5 @@
 
+from distutils.log import error
 from flask import Flask, redirect, render_template, request, session
 import gunicorn
 import bcrypt
@@ -64,13 +65,6 @@ def signout_action():
         session.pop("user")
     return redirect("/")
 
-
-@app.route("/register")
-def regiser():
-    if "user" in session:
-        return redirect("/")
-    return render_template("register.html") 
-
 @app.route("/create")
 def create():
     user = None
@@ -78,9 +72,36 @@ def create():
         return redirect("/")
 
     user = session.get("user")
-    return render_template("create.html", user=user)   
+    return render_template("create.html", user=user)
+
+@app.route("/register")
+def regiser():
+    if "user" in session:
+        return redirect("/")
+    return render_template("register.html") 
+
+
+@app.route("/register_action", methods=["POST"])
+def register_action():
+    if "user" in session:
+        return redirect("/")
+    # get form data
+    username = request.form.get("username")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    # hash password
+    password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    
+    # save user to the DB
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO users (username, email, hashed_password) VALUES (%s, %s, %s)", (username, email, password_hash))
+    connection.commit()
+    connection.close()
+
+    return redirect("/login")
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
     
 
