@@ -1,4 +1,5 @@
 
+from crypt import methods
 from distutils.log import error
 from flask import Flask, redirect, render_template, request, session
 import gunicorn
@@ -142,8 +143,28 @@ def register_action():
     connection.close()
 
     return redirect("/login")
-    
+
+@app.route("/like_button_action", methods=["POST"])
+def like_button_action():
+    sentence_id = request.form.get("sentence_id")
+    amnt_of_likes = int(request.form.get("sentence_likes"))
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes + 1} WHERE id = {sentence_id}")
+    connection.commit()
+    connection.close()
+    return redirect("/")
+
+@app.route("/unlike_button_action", methods=["POST"])
+def unlike_button_action():
+    sentence_id = request.form.get("sentence_id")
+    amnt_of_likes = int(request.form.get("sentence_likes"))
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes - 1} WHERE id = {sentence_id}")
+    connection.commit()
+    connection.close()
+    return redirect("/")
+
 if __name__ == "__main__":
     app.run(debug=True)
-    
-

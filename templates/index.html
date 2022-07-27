@@ -25,8 +25,22 @@
                             </div>
                             <div id="card-buttons">
                                 {% if user %}
-                                <button class="card-button">{{top_sentence[2]}} <i
-                                        class="fa-solid fa-thumbs-up"></i></button>
+                                <form class="like_form_{{top_sentence[3]}}" id="like_form" method="POST"
+                                    action="like_button_action">
+                                    <input hidden name="sentence_id" value="{{top_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
+                                    <button type="submit" class="card-button">{{top_sentence[2]}}
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                <form class="unlike_form_{{top_sentence[3]}}" id="unlike_form" method="POST"
+                                    action="unlike_button_action">
+                                    <input hidden name="sentence_id" value="{{top_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
+                                    <button type="submit" class="card-button">{{top_sentence[2]}}
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </button>
+                                </form>
                                 {% endif %}
                                 <button class="card-button"><i class="fa-solid fa-share"></i></button>
                             </div>
