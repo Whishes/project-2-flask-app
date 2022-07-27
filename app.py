@@ -146,22 +146,24 @@ def register_action():
 
 @app.route("/like_button_action", methods=["POST"])
 def like_button_action():
+    user_id = int(request.form.get("user_id"))
     sentence_id = request.form.get("sentence_id")
     amnt_of_likes = int(request.form.get("sentence_likes"))
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
-    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes + 1} WHERE id = {sentence_id}")
+    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes + 1}, liked_by_users = array_append(liked_by_users, {user_id}) WHERE id = {sentence_id}")
     connection.commit()
     connection.close()
     return redirect("/")
 
 @app.route("/unlike_button_action", methods=["POST"])
 def unlike_button_action():
+    user_id = int(request.form.get("user_id"))
     sentence_id = request.form.get("sentence_id")
     amnt_of_likes = int(request.form.get("sentence_likes"))
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
-    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes - 1} WHERE id = {sentence_id}")
+    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes - 1}, liked_by_users = array_remove(liked_by_users, {user_id}) WHERE id = {sentence_id}")
     connection.commit()
     connection.close()
     return redirect("/")
