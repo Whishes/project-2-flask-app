@@ -1,6 +1,4 @@
 
-from crypt import methods
-from distutils.log import error
 from flask import Flask, redirect, render_template, request, session
 import gunicorn
 import bcrypt
@@ -22,15 +20,16 @@ def index():
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
     cursor.execute("""
-    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username
+    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
     FROM sentences 
     INNER JOIN users ON sentences.user_id = users.id
     ORDER BY sentences.likes DESC 
     LIMIT 5;
     """)
     top_sentences = cursor.fetchall()
+    print(top_sentences)
     cursor.execute("""
-    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username
+    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
     FROM sentences 
     INNER JOIN users ON sentences.user_id = users.id
     ORDER BY RANDOM()
@@ -38,6 +37,7 @@ def index():
     """)
     random_sentences = cursor.fetchall()
     connection.close()
+    #print(user)
     
     return render_template("index.html", user=user, top_sentences = top_sentences, random_sentences = random_sentences)
 
@@ -147,6 +147,7 @@ def register_action():
 @app.route("/like_button_action", methods=["POST"])
 def like_button_action():
     user_id = int(request.form.get("user_id"))
+    print(user_id)
     sentence_id = request.form.get("sentence_id")
     amnt_of_likes = int(request.form.get("sentence_likes"))
     connection = psycopg2.connect(DATABASE_URL)

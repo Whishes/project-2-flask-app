@@ -18,31 +18,34 @@
                     <div class="carousel-item {{'active' if loop.index0 == 0 else ''}}">
                         <div class="carousel-content">
                             <div>
-                                <p id="user_id" style="display: none;">{{top_sentence[0]}}</p>
+                                <p id="user_id" style="display: none;">{{user['user_id']}}</p>
                                 <p id="sentence_id" style="display: none;">{{top_sentence[3]}}</p>
                                 <p id="user-sentence">{{top_sentence[1]}}</p>
                                 <p id="author">by {{top_sentence[4]}}</p>
                             </div>
                             <div id="card-buttons">
                                 {% if user %}
-                                <form class="like_form_{{top_sentence[3]}}" id="like_form" method="POST"
-                                    action="like_button_action">
-                                    <input hidden name="user_id" value="{{top_sentence[0]}}">
-                                    <input hidden name="sentence_id" value="{{top_sentence[3]}}">
-                                    <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
-                                    <button type="submit" class="card-button">{{top_sentence[2]}}
-                                        <i class="fa-regular fa-thumbs-up"></i>
-                                    </button>
-                                </form>
+                                {% if user["user_id"] in top_sentence[5] %}
                                 <form class="unlike_form_{{top_sentence[3]}}" id="unlike_form" method="POST"
                                     action="unlike_button_action">
-                                    <input hidden name="user_id" value="{{top_sentence[0]}}">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
                                     <input hidden name="sentence_id" value="{{top_sentence[3]}}">
                                     <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
                                     <button type="submit" class="card-button">{{top_sentence[2]}}
                                         <i class="fa-solid fa-thumbs-up"></i>
                                     </button>
                                 </form>
+                                {% else %}
+                                <form class="like_form_{{top_sentence[3]}}" id="like_form" method="POST"
+                                    action="like_button_action">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{top_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
+                                    <button type="submit" class="card-button">{{top_sentence[2]}}
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
                                 {% endif %}
                                 <button class="card-button"><i class="fa-solid fa-share"></i></button>
                             </div>
