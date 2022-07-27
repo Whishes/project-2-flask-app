@@ -1,4 +1,5 @@
 
+from wsgiref.util import request_uri
 from flask import Flask, redirect, render_template, request, session
 import gunicorn
 import bcrypt
@@ -11,35 +12,75 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "niceities-backup")
 app = Flask(__name__)
 app.secret_key = SECRET_KEY.encode()
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
     user = None
     if "user" in session:
         user = session.get("user")
         #print(user)
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
-    cursor.execute("""
-    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
-    FROM sentences 
-    INNER JOIN users ON sentences.user_id = users.id
-    ORDER BY sentences.likes DESC 
-    LIMIT 5;
-    """)
-    top_sentences = cursor.fetchall()
-    print(top_sentences)
-    cursor.execute("""
-    SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
-    FROM sentences 
-    INNER JOIN users ON sentences.user_id = users.id
-    ORDER BY RANDOM()
-    LIMIT 5;
-    """)
-    random_sentences = cursor.fetchall()
-    connection.close()
-    #print(user)
-    
-    return render_template("index.html", user=user, top_sentences = top_sentences, random_sentences = random_sentences)
+    if request.method == "GET":
+        connection = psycopg2.connect(DATABASE_URL)
+        cursor = connection.cursor()
+        cursor.execute("""
+        SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
+        FROM sentences 
+        INNER JOIN users ON sentences.user_id = users.id
+        ORDER BY sentences.likes DESC 
+        LIMIT 5;
+        """)
+        top_sentences = cursor.fetchall()
+        print(top_sentences)
+        cursor.execute("""
+        SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
+        FROM sentences 
+        INNER JOIN users ON sentences.user_id = users.id
+        ORDER BY RANDOM()
+        LIMIT 5;
+        """)
+        random_sentences = cursor.fetchall()
+        connection.close()
+        #print(user)
+        
+        return render_template("index.html", user=user, top_sentences = top_sentences, random_sentences = random_sentences)
+    if request.method == "POST":
+        if "user" not in session:
+            return redirect("/")
+        submit_type = request.form["submit_type"]
+        #print(submit_type)
+
+        if submit_type == "like_button":
+            try:
+                user_id = int(request.form["user_id"])
+                #print(user_id)
+                sentence_id = request.form["sentence_id"]
+                connection = psycopg2.connect(DATABASE_URL)
+                cursor = connection.cursor()
+                cursor.execute(f"SELECT likes FROM sentences WHERE id = {sentence_id}")
+                sentence_thing = cursor.fetchone()
+                print("likes value:",sentence_thing[0])
+                cursor.execute(f"UPDATE sentences SET likes = {sentence_thing[0] + 1}, liked_by_users = array_append(liked_by_users, {user_id}) WHERE id = {sentence_id}")
+                connection.commit()
+                connection.close()
+                return redirect("/")
+            except:
+                return redirect("/")
+        elif submit_type == "unlike_button":
+            try:
+                user_id = int(request.form.get("user_id"))
+                sentence_id = request.form.get("sentence_id")
+                connection = psycopg2.connect(DATABASE_URL)
+                cursor = connection.cursor()
+                cursor.execute(f"SELECT likes FROM sentences WHERE id = {sentence_id}")
+                sentence_thing = cursor.fetchone()
+                print("likes value:", sentence_thing[0])
+                cursor.execute(f"UPDATE sentences SET likes = {sentence_thing[0] - 1}, liked_by_users = array_remove(liked_by_users, {user_id}) WHERE id = {sentence_id}")
+                connection.commit()
+                connection.close()
+                return redirect("/")
+            except:
+                return redirect("/")
+        else:
+            return redirect("/")
 
 @app.route("/login")
 def login():

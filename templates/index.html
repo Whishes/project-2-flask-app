@@ -26,22 +26,46 @@
                             <div id="card-buttons">
                                 {% if user %}
                                 {% if user["user_id"] in top_sentence[5] %}
-                                <form class="unlike_form_{{top_sentence[3]}}" id="unlike_form" method="POST"
-                                    action="unlike_button_action">
+                                <form class="unlike_form_{{top_sentence[3]}}" id="unlike_form">
+                                    <input hidden name="unlike_button" value="unlike_button">
                                     <input hidden name="user_id" value="{{user['user_id']}}">
                                     <input hidden name="sentence_id" value="{{top_sentence[3]}}">
                                     <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
-                                    <button type="submit" class="card-button">{{top_sentence[2]}}
+                                    <button type="button" class="card-button"
+                                        onclick="unlike_button_function(event, {{top_sentence[3]|safe}})"><span>{{top_sentence[2]}}</span>
                                         <i class="fa-solid fa-thumbs-up"></i>
                                     </button>
                                 </form>
-                                {% else %}
-                                <form class="like_form_{{top_sentence[3]}}" id="like_form" method="POST"
-                                    action="like_button_action">
+                                <form class="like_form_{{top_sentence[3]}}" id="like_form" style="display: none">
+                                    <input hidden name="like_button" value="like_button">
                                     <input hidden name="user_id" value="{{user['user_id']}}">
                                     <input hidden name="sentence_id" value="{{top_sentence[3]}}">
                                     <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
-                                    <button type="submit" class="card-button">{{top_sentence[2]}}
+                                    <button type="button"
+                                        onclick="like_button_function(event, {{top_sentence[3]|safe}})"
+                                        class="card-button"><span>{{top_sentence[2]}}</span>
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <form class="unlike_form_{{top_sentence[3]}}" id="unlike_form" style="display: none;">
+                                    <input hidden name="unlike_button" value="unlike_button">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{top_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
+                                    <button type="button" class="card-button"
+                                        onclick="unlike_button_function(event, {{top_sentence[3]|safe}})"><span>{{top_sentence[2]}}</span>
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                <form class="like_form_{{top_sentence[3]}}" id="like_form">
+                                    <input hidden name="like_button" value="like_button">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{top_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{top_sentence[2]}}">
+                                    <button type="button"
+                                        onclick="like_button_function(event, {{top_sentence[3]|safe}})"
+                                        class="card-button"><span>{{top_sentence[2]}}</span>
                                         <i class="fa-regular fa-thumbs-up"></i>
                                     </button>
                                 </form>
@@ -101,3 +125,5 @@
 
 
 {%endblock%}
+
+<!-- action="unlike_button_action" -->
