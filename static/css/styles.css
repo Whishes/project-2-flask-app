@@ -362,6 +362,15 @@ select:focus {
 .filter {
     filter: invert(34%) sepia(78%) saturate(4126%) hue-rotate(330deg) brightness(95%) contrast(103%);
 }
+
+#shared_content {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 /* 
     FOOTER STYLING
 */
@@ -402,6 +411,10 @@ footer {
 
     .tab-2 {
         height: 700px;
+    }
+
+    #shared_content > h2 {
+        font-size: 3em;
     }
 }
 

@@ -187,7 +187,7 @@ def register_action():
 @app.route("/like_button_action", methods=["POST"])
 def like_button_action():
     user_id = int(request.form.get("user_id"))
-    print(user_id)
+    #print(user_id)
     sentence_id = request.form.get("sentence_id")
     amnt_of_likes = int(request.form.get("sentence_likes"))
     connection = psycopg2.connect(DATABASE_URL)
@@ -208,6 +208,21 @@ def unlike_button_action():
     connection.commit()
     connection.close()
     return redirect("/")
+
+@app.route("/<sentence_id>")
+def share_Sentence(sentence_id):
+    #print(sentence_id)
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute(f"""SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
+        FROM sentences 
+        INNER JOIN users ON sentences.user_id = users.id
+        WHERE sentences.id = {sentence_id}""")
+    returned_sentence = cursor.fetchone()
+    connection.close()
+
+    #print(returned_sentence)
+    return render_template("share.html", sentence_str = returned_sentence)
 
 if __name__ == "__main__":
     app.run(debug=True)

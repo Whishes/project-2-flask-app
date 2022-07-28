@@ -72,3 +72,26 @@ const unlike_button_function = (event, sentence_id) => {
 		`submit_type=${submit_type}&sentence_id=${sentence_id}&user_id=${user_id}`
 	);
 };
+
+const shareButton = (event, sentence_id) => {
+	event.preventDefault();
+	//console.log(sentence_id);
+	if (navigator.share) {
+		navigator
+			.share({
+				title: `https://immense-chamber-64350.herokuapp.com/${sentence_id}`,
+				url: "https://immense-chamber-64350.herokuapp.com/${sentence_id}",
+			})
+			.then(() => {
+				console.log("sentence has been shared");
+			})
+			.catch((error) => {
+				console.log("error sharing the sentence: ", error);
+			});
+	} else {
+		navigator.clipboard.writeText(
+			`https://immense-chamber-64350.herokuapp.com/${sentence_id}`
+		);
+		alert("The sentence has been copied to your clipboard!");
+	}
+};

@@ -17,7 +17,7 @@
                     {% for top_sentence in top_sentences%}
                     <div class="carousel-item {{'active' if loop.index0 == 0 else ''}}">
                         <div class="carousel-content">
-                            <div>
+                            <div id="sentence_{{top_sentence[3]}}">
                                 <p id="user_id" style="display: none;">{{user['user_id']}}</p>
                                 <p id="sentence_id" style="display: none;">{{top_sentence[3]}}</p>
                                 <p id="user-sentence">{{top_sentence[1]}}</p>
@@ -71,7 +71,8 @@
                                 </form>
                                 {% endif %}
                                 {% endif %}
-                                <button class="card-button"><i class="fa-solid fa-share"></i></button>
+                                <button type="button" onclick="shareButton(event, {{top_sentence[3]|safe}})"
+                                    class="card-button share"><i class="fa-solid fa-share"></i></button>
                             </div>
                         </div>
                     </div>
@@ -97,7 +98,7 @@
                     {% for random_sentence in random_sentences%}
                     <div class="carousel-item {{'active' if loop.index0 == 0 else ''}}">
                         <div class="carousel-content">
-                            <div>
+                            <div id="sentence_{{random_sentence[3]}}">
                                 <p id="user_id" style="display: none;">{{random_sentence[0]}}</p>
                                 <p id="sentence_id" style="display: none;">{{random_sentence[3]}}</p>
                                 <p id="user-sentence">{{random_sentence[1]}}</p>
@@ -152,7 +153,8 @@
                                 </form>
                                 {% endif %}
                                 {% endif %}
-                                <button class="card-button"><i class="fa-solid fa-share"></i></button>
+                                <button type="button" onclick="shareButton(event, {{random_sentence[1]|safe}})"
+                                    class="card-button share"><i class="fa-solid fa-share"></i></button>
                             </div>
                         </div>
                     </div>
