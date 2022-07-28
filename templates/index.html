@@ -105,8 +105,52 @@
                             </div>
                             <div id="card-buttons">
                                 {% if user %}
-                                <button class="card-button">{{random_sentence[2]}} <i
-                                        class="fa-solid fa-thumbs-up"></i></button>
+                                {% if user["user_id"] in random_sentence[5] %}
+                                <form class="unlike_form_{{random_sentence[3]}}" id="unlike_form">
+                                    <input hidden name="unlike_button" value="unlike_button">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{random_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{random_sentence[2]}}">
+                                    <button type="button" class="card-button"
+                                        onclick="unlike_button_function(event, {{random_sentence[3]|safe}})"><span>{{random_sentence[2]}}</span>
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                <form class="like_form_{{random_sentence[3]}}" id="like_form" style="display: none">
+                                    <input hidden name="like_button" value="like_button">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{random_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{random_sentence[2]}}">
+                                    <button type="button"
+                                        onclick="like_button_function(event, {{random_sentence[3]|safe}})"
+                                        class="card-button"><span>{{random_sentence[2]}}</span>
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <form class="unlike_form_{{random_sentence[3]}}" id="unlike_form"
+                                    style="display: none;">
+                                    <input hidden name="unlike_button" value="unlike_button">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{random_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{random_sentence[2]}}">
+                                    <button type="button" class="card-button"
+                                        onclick="unlike_button_function(event, {{random_sentence[3]|safe}})"><span>{{random_sentence[2]}}</span>
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                <form class="like_form_{{random_sentence[3]}}" id="like_form">
+                                    <input hidden name="like_button" value="like_button">
+                                    <input hidden name="user_id" value="{{user['user_id']}}">
+                                    <input hidden name="sentence_id" value="{{random_sentence[3]}}">
+                                    <input hidden name="sentence_likes" value="{{random_sentence[2]}}">
+                                    <button type="button"
+                                        onclick="like_button_function(event, {{random_sentence[3]|safe}})"
+                                        class="card-button"><span>{{random_sentence[2]}}</span>
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
                                 {% endif %}
                                 <button class="card-button"><i class="fa-solid fa-share"></i></button>
                             </div>

@@ -16,7 +16,8 @@ connection.commit()
 
 
 cursor.execute("""
-INSERT INTO sentences (user_id, sentence) VALUES (%s, %s);
+INSERT INTO sentences (user_id, sentence) 
+VALUES (%s, %s);
 """, (1, "Test Sentence 1"))
 cursor.execute("""
 INSERT INTO sentences (user_id, sentence, likes) VALUES (%s, %s, %s);

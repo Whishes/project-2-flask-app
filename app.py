@@ -1,5 +1,4 @@
 
-from wsgiref.util import request_uri
 from flask import Flask, redirect, render_template, request, session
 import gunicorn
 import bcrypt
@@ -29,7 +28,7 @@ def index():
         LIMIT 5;
         """)
         top_sentences = cursor.fetchall()
-        print(top_sentences)
+        #print(top_sentences)
         cursor.execute("""
         SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
         FROM sentences 
