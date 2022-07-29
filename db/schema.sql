@@ -16,9 +16,4 @@ CREATE TABLE sentences (
     liked_by_users integer[] DEFAULT array[]::integer[]
 );
 
---column in sentences called - liked_by_users integer[]
--- example: get all sentences liked by user_id 5
 
-SELECT * 
-FROM sentences
-WHERE 5 = ANY (liked_users);

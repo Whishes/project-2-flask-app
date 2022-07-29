@@ -187,7 +187,6 @@ def register_action():
 @app.route("/like_button_action", methods=["POST"])
 def like_button_action():
     user_id = int(request.form.get("user_id"))
-    #print(user_id)
     sentence_id = request.form.get("sentence_id")
     amnt_of_likes = int(request.form.get("sentence_likes"))
     connection = psycopg2.connect(DATABASE_URL)
@@ -209,9 +208,11 @@ def unlike_button_action():
     connection.close()
     return redirect("/")
 
-@app.route("/<sentence_id>")
+@app.route("/shared/<sentence_id>")
 def share_Sentence(sentence_id):
-    #print(sentence_id)
+    user = None
+    if "user" in session:
+        user = session.get("user")
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
     cursor.execute(f"""SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
@@ -222,7 +223,22 @@ def share_Sentence(sentence_id):
     connection.close()
 
     #print(returned_sentence)
-    return render_template("share.html", sentence_str = returned_sentence)
+    return render_template("share.html", sentence_str = returned_sentence, user=user)
+
+@app.route("/profile")
+def profile():
+    if "user" not in session:
+        return redirect("/")
+    user = session.get("user")
+    user_id = user["user_id"]
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * FROM sentences WHERE user_id = {user_id};")
+    returned_sentences = cursor.fetchall()
+    connection.close()
+    
+    print(returned_sentences)
+    return render_template("profile.html", returned_sentences = returned_sentences, user=user)
 
 if __name__ == "__main__":
     app.run(debug=True)

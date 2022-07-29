@@ -1,0 +1,20 @@
+{%extends "base.html"%}
+
+{% block main%}
+<div id="card-top">
+    <h1>Profile</h1>
+</div>
+<div id="card-middle">
+    {% if returned_sentences %}
+    {%for returned_data in returned_sentences%}
+    <div>
+        <p>{{returned_data[2]}}</p>
+        <p>{{returned_data[3]}}</p>
+    </div>
+    {%endfor%}
+    {%else%}
+    <p>No content to show :(</p>
+    {%endif%}
+</div>
+<div id="card-bottom"></div>
+{%endblock%}

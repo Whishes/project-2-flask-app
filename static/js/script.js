@@ -79,8 +79,8 @@ const shareButton = (event, sentence_id) => {
 	if (navigator.share) {
 		navigator
 			.share({
-				title: `https://immense-chamber-64350.herokuapp.com/${sentence_id}`,
-				url: "https://immense-chamber-64350.herokuapp.com/${sentence_id}",
+				title: `https://immense-chamber-64350.herokuapp.com/share/${sentence_id}`,
+				url: "https://immense-chamber-64350.herokuapp.com/share/${sentence_id}",
 			})
 			.then(() => {
 				console.log("sentence has been shared");
@@ -90,7 +90,7 @@ const shareButton = (event, sentence_id) => {
 			});
 	} else {
 		navigator.clipboard.writeText(
-			`https://immense-chamber-64350.herokuapp.com/${sentence_id}`
+			`https://immense-chamber-64350.herokuapp.com/share/${sentence_id}`
 		);
 		alert("The sentence has been copied to your clipboard!");
 	}
