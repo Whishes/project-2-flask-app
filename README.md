@@ -1,6 +1,6 @@
 # _Project-2_ Nice-ities
 
-![Project-2 Example image](https://imgur.com/a/nS0hvVL)
+![Project-2 Example image](Whishes/project-images/Screenshot_4.jpg)
 
 ## Can be found at:
 
@@ -47,7 +47,7 @@ During this project the technologies that had been used were;
 
 ## Database Design
 
-![Project 2 database design image](https://imgur.com/a/M7AGmoo)
+![Project 2 database design image](Whishes/project-images/Screenshot_5.jpg)
 
 ## Acknowledgements
 
