@@ -1,6 +1,6 @@
 # _Project-2_ Nice-ities
 
-![Project-2 Example image](Whishes/project-images/Screenshot_4.jpg)
+<img src="/static/images/github_img_1.jpg" alt="project-img" width="900" height="600">
 
 ## Can be found at:
 
@@ -47,7 +47,7 @@ During this project the technologies that had been used were;
 
 ## Database Design
 
-![Project 2 database design image](Whishes/project-images/Screenshot_5.jpg)
+<img src="/static/images/github_img_2.jpg" alt="db-design" width="900" height="600">
 
 ## Acknowledgements
 
