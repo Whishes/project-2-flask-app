@@ -1,4 +1,3 @@
-
 from flask import Flask, redirect, render_template, request, session
 import gunicorn
 import bcrypt
@@ -16,10 +15,11 @@ def index():
     user = None
     if "user" in session:
         user = session.get("user")
-        #print(user)
+
     if request.method == "GET":
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
+        # get first set of sentences
         cursor.execute("""
         SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
         FROM sentences 
@@ -28,7 +28,8 @@ def index():
         LIMIT 5;
         """)
         top_sentences = cursor.fetchall()
-        #print(top_sentences)
+
+        # get second set of sentences
         cursor.execute("""
         SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
         FROM sentences 
@@ -39,14 +40,13 @@ def index():
         random_sentences = cursor.fetchall()
         connection.close()
         #print(user)
-        
         return render_template("index.html", user=user, top_sentences = top_sentences, random_sentences = random_sentences)
+        
     if request.method == "POST":
         if "user" not in session:
             return redirect("/")
-        submit_type = request.form["submit_type"]
-        #print(submit_type)
 
+        submit_type = request.form["submit_type"]
         if submit_type == "like_button":
             try:
                 user_id = int(request.form["user_id"])
@@ -54,24 +54,28 @@ def index():
                 sentence_id = request.form["sentence_id"]
                 connection = psycopg2.connect(DATABASE_URL)
                 cursor = connection.cursor()
+                #get the amount of likes from the specific id
                 cursor.execute(f"SELECT likes FROM sentences WHERE id = {sentence_id}")
                 sentence_thing = cursor.fetchone()
-                print("likes value:",sentence_thing[0])
+                #update the specific sentence with the new likes total
                 cursor.execute(f"UPDATE sentences SET likes = {sentence_thing[0] + 1}, liked_by_users = array_append(liked_by_users, {user_id}) WHERE id = {sentence_id}")
                 connection.commit()
                 connection.close()
                 return redirect("/")
             except:
                 return redirect("/")
+
         elif submit_type == "unlike_button":
             try:
                 user_id = int(request.form.get("user_id"))
                 sentence_id = request.form.get("sentence_id")
+
                 connection = psycopg2.connect(DATABASE_URL)
                 cursor = connection.cursor()
+                #get the amount of likes from the specific id
                 cursor.execute(f"SELECT likes FROM sentences WHERE id = {sentence_id}")
                 sentence_thing = cursor.fetchone()
-                print("likes value:", sentence_thing[0])
+                #update the specific sentence with the new likes total
                 cursor.execute(f"UPDATE sentences SET likes = {sentence_thing[0] - 1}, liked_by_users = array_remove(liked_by_users, {user_id}) WHERE id = {sentence_id}")
                 connection.commit()
                 connection.close()
@@ -93,6 +97,7 @@ def doLogin():
         #check hashed password
         def check(string, hashed_string):
             return bcrypt.checkpw(string.encode(), hashed_string.encode())
+
         # get user login data from login form
         username = str(request.form.get("username"))
         password = request.form.get("password")
@@ -110,11 +115,10 @@ def doLogin():
             #if there is a result do this
             results = cursor.fetchall()
             connection.close()
-            #print(results)
+
             # checks password hash to make sure it matches
             if (check(password, results[0][3])):
                 user_data = {"user_id": results[0][0], "username": results[0][1],"email": results[0][2]}
-                #print(user_data)
                 # put all non-sensitive user data into session for later
                 session["user"] = user_data
                 return redirect("/")
@@ -134,7 +138,6 @@ def create():
         return redirect("/")
 
     user = session.get("user")
-    #print(user)
     return render_template("create.html", user=user)
 
 @app.route("/create_action", methods=["POST"])
@@ -145,8 +148,6 @@ def create_sentence():
     # get form data
     user_id = request.form.get("user_id")
     sentence_str = request.form.get("sentence")
-
-    #print("user id: " + user_id)
 
     # save form data to database
     connection = psycopg2.connect(DATABASE_URL)
@@ -168,10 +169,12 @@ def regiser():
 def register_action():
     if "user" in session:
         return redirect("/")
+
     # get form data
     username = request.form.get("username")
     email = request.form.get("email")
     password = request.form.get("password")
+
     # hash password
     password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     
@@ -184,35 +187,13 @@ def register_action():
 
     return redirect("/login")
 
-@app.route("/like_button_action", methods=["POST"])
-def like_button_action():
-    user_id = int(request.form.get("user_id"))
-    sentence_id = request.form.get("sentence_id")
-    amnt_of_likes = int(request.form.get("sentence_likes"))
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
-    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes + 1}, liked_by_users = array_append(liked_by_users, {user_id}) WHERE id = {sentence_id}")
-    connection.commit()
-    connection.close()
-    return redirect("/")
-
-@app.route("/unlike_button_action", methods=["POST"])
-def unlike_button_action():
-    user_id = int(request.form.get("user_id"))
-    sentence_id = request.form.get("sentence_id")
-    amnt_of_likes = int(request.form.get("sentence_likes"))
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
-    cursor.execute(f"UPDATE sentences SET likes = {amnt_of_likes - 1}, liked_by_users = array_remove(liked_by_users, {user_id}) WHERE id = {sentence_id}")
-    connection.commit()
-    connection.close()
-    return redirect("/")
-
 @app.route("/shared/<sentence_id>")
 def share_Sentence(sentence_id):
     user = None
     if "user" in session:
         user = session.get("user")
+    
+    # get specifc sentence from the id from the link
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
     cursor.execute(f"""SELECT sentences.user_id, sentences.sentence, sentences.likes, sentences.id, users.username, sentences.liked_by_users
@@ -222,23 +203,39 @@ def share_Sentence(sentence_id):
     returned_sentence = cursor.fetchone()
     connection.close()
 
-    #print(returned_sentence)
     return render_template("share.html", sentence_str = returned_sentence, user=user)
 
 @app.route("/profile")
 def profile():
     if "user" not in session:
         return redirect("/")
+
+    # get user/user_id from session
     user = session.get("user")
     user_id = user["user_id"]
+
+    # get all sentences from the specific user
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
     cursor.execute(f"SELECT * FROM sentences WHERE user_id = {user_id};")
     returned_sentences = cursor.fetchall()
     connection.close()
     
-    print(returned_sentences)
     return render_template("profile.html", returned_sentences = returned_sentences, user=user)
+
+@app.route("/delete_sentence_action", methods=["DELETE"])
+def delete_sentence():
+    try:
+        sentence_id = request.form.get("sentence_id")
+        
+        connection = psycopg2.connect(DATABASE_URL)
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM sentences WHERE id = {sentence_id}")
+        connection.commit()
+        connection.close()
+        return {"status": 204}
+    except: 
+        return {"status": 400}
 
 if __name__ == "__main__":
     app.run(debug=True)

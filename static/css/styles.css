@@ -371,6 +371,25 @@ select:focus {
     align-items: center;
 }
 
+.profile_content {
+    display: flex;
+    margin-left: 1em;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    border-bottom: 1px solid #f4474d;
+}
+
+#delete_button{
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#profile_data {
+    margin-left: 1em;
+}
+
 /* 
     FOOTER STYLING
 */

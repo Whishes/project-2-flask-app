@@ -7,13 +7,19 @@
 <div id="card-middle">
     {% if returned_sentences %}
     {%for returned_data in returned_sentences%}
-    <div>
-        <p>{{returned_data[2]}}</p>
-        <p>{{returned_data[3]}}</p>
+    <div class="profile_content" data-id="{{returned_data[0]}}">
+        <button onclick="deleteButton(event, {{returned_data[0]}})" id="delete_button" type="button"><i
+                class="fa-solid fa-circle-minus fa-2x"></i></button>
+        <div id="profile_data">
+            <p><span>Sentence: </span>{{returned_data[2]}}</p>
+            <p><span>Likes: </span>{{returned_data[3]}}</p>
+        </div>
     </div>
     {%endfor%}
     {%else%}
-    <p>No content to show :(</p>
+    <div id="profile_content">
+        <p>No content to show :(</p>
+    </div>
     {%endif%}
 </div>
 <div id="card-bottom"></div>
