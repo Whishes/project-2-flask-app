@@ -25,7 +25,7 @@ def index():
         FROM sentences 
         INNER JOIN users ON sentences.user_id = users.id
         ORDER BY sentences.likes DESC 
-        LIMIT 5;
+        LIMIT 3;
         """)
         top_sentences = cursor.fetchall()
 
@@ -35,7 +35,7 @@ def index():
         FROM sentences 
         INNER JOIN users ON sentences.user_id = users.id
         ORDER BY RANDOM()
-        LIMIT 5;
+        LIMIT 10;
         """)
         random_sentences = cursor.fetchall()
         connection.close()
@@ -187,7 +187,7 @@ def register_action():
 
     return redirect("/login")
 
-@app.route("/shared/<sentence_id>")
+@app.route("/share/<sentence_id>")
 def share_Sentence(sentence_id):
     user = None
     if "user" in session:
@@ -227,7 +227,7 @@ def profile():
 def delete_sentence():
     try:
         sentence_id = request.form.get("sentence_id")
-        
+
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM sentences WHERE id = {sentence_id}")
